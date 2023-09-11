@@ -161,4 +161,4 @@ static int __init lfs_init(void)
 module_init(lfs_init);
 
 MODULE_LICENSE("GPL v2");
-MODULE_AUTHOR("suxiaocheng")
+MODULE_AUTHOR("suxiaocheng");
