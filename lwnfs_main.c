@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0
+
 #include <linux/fs.h>
 #include <linux/init.h>
 #include <linux/module.h>
@@ -158,5 +160,5 @@ static int __init lfs_init(void)
 }
 module_init(lfs_init);
 
-MODULE_LICENSE("GPL");
-
+MODULE_LICENSE("GPL v2");
+MODULE_AUTHOR("suxiaocheng")
