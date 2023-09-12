@@ -51,7 +51,7 @@ static ssize_t lfs_write_file(struct file *filp, const char *buf,
 
 static int lfs_open(struct inode *inode, struct file *filp)
 {
-	// filp->private_data = inode->u.generic_ip;
+	filp->private_data = inode->i_private;
 	return 0;
 }
 
@@ -59,6 +59,11 @@ static struct file_operations lfs_file_ops = {
 	.open	= lfs_open,
 	.read 	= lfs_read_file,
 	.write  = lfs_write_file,
+};
+
+const struct inode_operations lfs_file_inode_operations = {
+        .setattr        = simple_setattr,
+        .getattr        = simple_getattr,
 };
 
 static struct dentry *lfs_create_file (struct super_block *sb,
@@ -71,14 +76,15 @@ static struct dentry *lfs_create_file (struct super_block *sb,
 
 	qname.name = name;
 	qname.len = strlen (name);
-	qname.hash = full_name_hash(0x0, name, qname.len);
+	qname.hash = full_name_hash(dir, name, qname.len);
 	dentry = d_alloc(dir, &qname);
 
 	inode = lfs_make_inode(sb, S_IFREG | 0644);
 	if (! inode)
 		goto out_dput;
 	inode->i_fop = &lfs_file_ops;
-	// inode->u.generic_ip = counter;
+	inode->i_op = &lfs_file_inode_operations;
+	inode->i_private = counter;
 
 	d_add(dentry, inode);
 	return dentry;
@@ -137,6 +143,7 @@ static int lfs_fill_super (struct super_block *sb, void *data, int silent)
 		goto fail;
 	}
 	lfs_create_files(sb, sb->s_root);
+	return 0;
 
 fail:
 	return err;
