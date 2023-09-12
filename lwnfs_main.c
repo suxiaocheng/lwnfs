@@ -158,7 +158,7 @@ static struct dentry *lfs_get_super(struct file_system_type *fst,
 static struct file_system_type lfs_type = {
 	.name		= "lwnfs",
 	.mount		= lfs_get_super,
-	// .kill_sb	= kill_litter_super,
+	.kill_sb	= kill_litter_super,
 };
 
 static int __init lfs_init(void)
