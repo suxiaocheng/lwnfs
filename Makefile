@@ -7,12 +7,14 @@ lwnfs-y = lwnfs_main.o
 
 else
 # normal makefile
-KDIR ?= /work/program/vexpress/buildroot-2022.02.6/output/build/linux-5.15.18
+BR_DIR ?= /home/suxiaocheng/program/buildroot/vexpress/buildroot-2022.02.6
+KDIR ?= $(BR_DIR)/output/build/linux-5.15.18
+CROSS_COMPILE=$(BR_DIR)/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-
 CFLAGS := -I$(KDIR)/include
 PWD := $(shell pwd)
 
 all:
-	make $(CFLAGS) ARCH=arm CROSS_COMPILE=arm-buildroot-linux-uclibcgnueabihf- -C  $(KDIR) M=$(PWD) modules
+	make $(CFLAGS) ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) -C  $(KDIR) M=$(PWD) modules
 clean:
 	rm -rf *.o *.mod.c *.ko *.symvers *.order *.makers
 
